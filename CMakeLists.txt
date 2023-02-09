@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.24)
 project(kokkos_pair_sort)
 
-find_package(Kokkos REQUIRED)
+add_subdirectory(libs/kokkos)
 
 set(CMAKE_CXX_STANDARD 17)
 
