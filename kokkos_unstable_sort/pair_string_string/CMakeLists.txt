@@ -1,5 +1,0 @@
-cmake_minimum_required(VERSION 3.24)
-project(UnstableSortPairStringString)
-
-add_executable(UnstableSortPairStringString main.cpp)
-target_link_libraries(UnstableSortPairStringString Kokkos::kokkos)
