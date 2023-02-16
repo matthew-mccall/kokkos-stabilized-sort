@@ -1,0 +1,2 @@
+# Kokkos Unstable Sort
+This code demonstrates the instability of the currently implemented sorting algorithm by sorting an array of pairs based on the key only. The sorting algorithm used does not guarantee stability, and as a result, the order of equal elements in the sorted array may vary.
