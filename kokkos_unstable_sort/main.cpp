@@ -4,17 +4,18 @@
 #include "Kokkos_Core.hpp"
 #include "Kokkos_NestedSort.hpp"
 
+#include <cstdint>
 #include <iostream>
 
 // function for printing a view of pairs
 template <typename ViewType>
 void print_view(ViewType view) {
     // Deep copy to host
-    Kokkos::View<Kokkos::pair<int, int>*, Kokkos::HostSpace> host_view("host_view", view.extent(0));
+    Kokkos::View<Kokkos::pair<std::uint32_t, std::uint32_t>*, Kokkos::HostSpace> host_view("host_view", view.extent(0));
     Kokkos::deep_copy(host_view, view);
 
     // Print deep copy
-    for (int i = 0; i < view.extent(0); i++) {
+    for (std::uint32_t i = 0; i < view.extent(0); i++) {
         std::cout << '(' << host_view(i).first << " " << host_view(i).second << ')';
 
         if (i < view.extent(0) - 1) {
@@ -28,18 +29,21 @@ void print_view(ViewType view) {
 // Custom comparator for sorting
 struct custom_comparator {
     KOKKOS_INLINE_FUNCTION
-    bool operator()(const Kokkos::pair<int, int>& a, const Kokkos::pair<int, int>& b) const {
+    bool operator()(const Kokkos::pair<std::uint32_t, std::uint32_t>& a, const Kokkos::pair<std::uint32_t, std::uint32_t>& b) const {
         return a.first < b.first;
     }
 };
 
-int main() {
+int main(int argc, char **argv) {
+    constexpr std::uint32_t NUMBER_OF_PAIRS = 30;
+    constexpr std::uint32_t PAIR_GROUPS = 3;
+    
     Kokkos::ScopeGuard kokkos;
 
     // Kokkos generate array of pairs
-    Kokkos::View<Kokkos::pair<int, int>*> b("b", 30);
-    Kokkos::parallel_for("Init", 30, KOKKOS_LAMBDA (const int i) {
-        b(i) = Kokkos::pair<int, int>((29 - i) / 3, (i % 3) + 1);
+    Kokkos::View<Kokkos::pair<std::uint32_t, std::uint32_t>*> b("b", NUMBER_OF_PAIRS);
+    Kokkos::parallel_for("Init", NUMBER_OF_PAIRS, KOKKOS_LAMBDA (const std::uint32_t i) {
+        b(i) = Kokkos::pair<std::uint32_t, std::uint32_t>((NUMBER_OF_PAIRS - 1 - i) / PAIR_GROUPS, (i % PAIR_GROUPS) + 1);
     });
 
     std::cout << "Before sort" << std::endl;
@@ -48,7 +52,7 @@ int main() {
     //=== Kokkos nested sort by key with sort_team ===
 
     // Create a team policy
-    Kokkos::TeamPolicy<> policy(30, 1);
+    Kokkos::TeamPolicy<> policy(NUMBER_OF_PAIRS, Kokkos::AUTO());
 
     //=== Kokkos nested sort with custom comparator ===
     Kokkos::parallel_for("Sort", policy, KOKKOS_LAMBDA (const Kokkos::TeamPolicy<>::member_type& team) {

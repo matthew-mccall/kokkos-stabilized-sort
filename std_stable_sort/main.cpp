@@ -3,13 +3,14 @@
 //
 
 #include <algorithm>
+#include <cstdint>
 #include <execution>
 #include <iostream>
 #include <utility>
 #include <vector>
 
-void print_vector(std::vector<std::pair<int, int>> a) {
-    for (int i = 0; i < a.size(); i++) {
+void print_vector(std::vector<std::pair<std::uint32_t, std::uint32_t>> a) {
+    for (std::uint32_t i = 0; i < a.size(); i++) {
         std::cout << '(' << a[i].first << " " << a[i].second << ')';
 
         if (i < a.size() - 1) {
@@ -21,17 +22,20 @@ void print_vector(std::vector<std::pair<int, int>> a) {
 }
 
 struct custom_comparator {
-    bool operator()(const std::pair<int, int>& a, const std::pair<int, int>& b) const {
+    bool operator()(const std::pair<std::uint32_t, std::uint32_t>& a, const std::pair<std::uint32_t, std::uint32_t>& b) const {
         return a.first < b.first;
     }
 };
 
 int main(int argc, char **argv)
 {
-    std::vector<std::pair<int, int>> a(30);
+    constexpr std::uint32_t NUMBER_OF_PAIRS = 30;
+    constexpr std::uint32_t PAIR_GROUPS = 3;
+    
+    std::vector<std::pair<std::uint32_t, std::uint32_t>> a(NUMBER_OF_PAIRS);
 
-    for (int i = 0; i < 30; i++) {
-        a[i] = std::pair<int, int>((29 - i) / 3, (i % 3) + 1);
+    for (std::uint32_t i = 0; i < NUMBER_OF_PAIRS; i++) {
+        a[i] = std::pair<std::uint32_t, std::uint32_t>((NUMBER_OF_PAIRS - 1 - i) / PAIR_GROUPS, (i %  PAIR_GROUPS) + 1);
     }
 
     std::cout << "Before sort" << std::endl;
