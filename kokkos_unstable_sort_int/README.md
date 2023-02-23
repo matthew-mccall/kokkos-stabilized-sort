@@ -1,0 +1,2 @@
+# Kokkos Unstable Sort Int
+This code demonstrates the instability of the currently implemented sorting algorithm by sorting an array of ints. The sorting algorithm used does not guarantee stability, and as a result, the order of equal elements in the sorted array may vary.
