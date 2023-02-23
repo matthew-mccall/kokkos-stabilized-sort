@@ -5,3 +5,8 @@ This repository contains examples of a stable sorting algorithm, an unstable sor
 - `std_stable_sort` contains an example of a stable sorting algorithm using `std::stable_sort`. 
 - `kokkos_unstable_sort` contains an example of an unstable sorting algorithm using `Kokkos::Experimental::sort_team`. 
 - `kokkos_stabilized_unstable_sort` contains an example of a stabilized unstable sorting algorithm using `Kokkos::Experimental::sort_team` and a permutation array.
+
+## Usage
+`./KokkosStabilizedUnstableSort [number_of_pairs] [number_of_unique_values_per_key]]`
+
+Each example takes the total number of pairs and the number of unique values per key.

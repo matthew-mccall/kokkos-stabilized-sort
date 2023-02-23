@@ -29,8 +29,12 @@ struct custom_comparator {
 
 int main(int argc, char **argv)
 {
-    constexpr std::uint32_t NUMBER_OF_PAIRS = 30;
-    constexpr std::uint32_t PAIR_GROUPS = 3;
+    assert(argc == 3);
+
+    unsigned long NUMBER_OF_PAIRS = std::stoul(std::string {argv[1]});
+    unsigned long PAIR_GROUPS = std::stoul(std::string {argv[2]});
+
+    std::cout << "Using " << NUMBER_OF_PAIRS << " pairs with " << PAIR_GROUPS << " unique values per key" << std::endl;
     
     std::vector<std::pair<std::uint32_t, std::uint32_t>> a(NUMBER_OF_PAIRS);
 
