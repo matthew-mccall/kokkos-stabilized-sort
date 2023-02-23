@@ -50,18 +50,6 @@ int main(int argc, char **argv)
     std::cout << "Before sort" << std::endl;
     print_vector(a, indices);
 
-    auto functor = KOKKOS_LAMBDA (const Kokkos::TeamPolicy<>::member_type& team) {
-        Kokkos::Experimental::sort_team(team, indices, [&a](std::uint32_t i, std::uint32_t j) {
-            // compare pairs by key, the by index
-            if (a[i].first == a[j].first) {
-                // Since the indices are sorted, we can just compare them
-                return i < j;
-            }
-
-            return a[i].first < a[j].first;
-        });
-    };
-
     Kokkos::TeamPolicy<> policy(NUMBER_OF_PAIRS, Kokkos::AUTO());
 
     //=== Kokkos nested sort with custom comparator ===
