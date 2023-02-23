@@ -9,8 +9,13 @@
 // function for printing a view of pairs
 template <typename ViewType>
 void print_view(ViewType view) {
+    // Deep copy to host
+    Kokkos::View<Kokkos::pair<int, int>*, Kokkos::HostSpace> host_view("host_view", view.extent(0));
+    Kokkos::deep_copy(host_view, view);
+
+    // Print deep copy
     for (int i = 0; i < view.extent(0); i++) {
-        std::cout << '(' << view(i).first << " " << view(i).second << ')';
+        std::cout << '(' << host_view(i).first << " " << host_view(i).second << ')';
 
         if (i < view.extent(0) - 1) {
             std::cout << ", ";

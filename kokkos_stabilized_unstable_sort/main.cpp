@@ -9,10 +9,15 @@
 #include "Kokkos_Core.hpp"
 #include "Kokkos_NestedSort.hpp"
 
-template<typename ViewType>
-void print_vector(std::vector<std::pair<int, int>> a, ViewType view) {
+template<typename T>
+void print_vector(std::vector<std::pair<int, int>> &a, Kokkos::View<T*> view) {
+    // Deep copy to host
+    Kokkos::View<T*, Kokkos::HostSpace> host_view("host_view", view.extent(0));
+    Kokkos::deep_copy(host_view, view);
+
+    // Print deep copy
     for (int i = 0; i < view.extent(0); i++) {
-        std::cout << '(' << a[view(i)].first << " " << a[view(i)].second << ')';
+        std::cout << '(' << a[host_view(i)].first << " " << a[host_view(i)].second << ')';
 
         if (i < view.extent(0) - 1) {
             std::cout << ", ";
