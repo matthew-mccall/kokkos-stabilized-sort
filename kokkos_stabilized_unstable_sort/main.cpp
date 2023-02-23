@@ -2,6 +2,7 @@
 // Created by Matthew McCall on 2/16/23.
 //
 
+#include <cassert>
 #include <cstdint>
 #include <iostream>
 #include <utility>

@@ -4,6 +4,7 @@
 #include "Kokkos_Core.hpp"
 #include "Kokkos_NestedSort.hpp"
 
+#include <cassert>
 #include <cstdint>
 #include <iostream>
 
