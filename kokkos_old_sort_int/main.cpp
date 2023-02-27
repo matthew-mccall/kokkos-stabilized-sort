@@ -1,13 +1,9 @@
 //
-// Created by Matthew McCall on 2/16/23.
+// Created by Matthew McCall on 2/27/23.
 //
 #include "Kokkos_Core.hpp"
-#include "Kokkos_NestedSort.hpp"
+#include "Kokkos_Sort.hpp"
 
-#include <cassert>
-#include <iostream>
-
-// function for printing a view of pairs
 template <typename ViewType>
 void print_view(ViewType view) {
     // Deep copy to host
@@ -32,7 +28,7 @@ int main(int argc, char **argv) {
     unsigned long NUMBER_OF_INTS = std::stoul(std::string {argv[1]});
 
     std::cout << "Using " << NUMBER_OF_INTS << std::endl;
-    
+
     Kokkos::ScopeGuard kokkos;
 
     // Kokkos generate array of ints
@@ -44,15 +40,8 @@ int main(int argc, char **argv) {
     std::cout << "Before sort" << std::endl;
     print_view(b);
 
-    //=== Kokkos nested sort by key with sort_team ===
-
-    // Create a team policy
-    Kokkos::TeamPolicy<> policy(static_cast<int>(NUMBER_OF_INTS), Kokkos::AUTO());
-
-    //=== Kokkos nested sort with custom comparator ===
-    Kokkos::parallel_for("Sort", policy, KOKKOS_LAMBDA (const Kokkos::TeamPolicy<>::member_type& team) {
-        Kokkos::Experimental::sort_team(team, b);
-    });
+    // Kokkos sort
+    Kokkos::sort(b);
 
     // Print pairs
     std::cout << "After sort" << std::endl;
